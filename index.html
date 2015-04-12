@@ -1,0 +1,121 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Python's object model</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=792, user-scalable=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <link rel="stylesheet" href="styles/ribbon.css">
+    <link rel="stylesheet" href="styles/highlight.css">
+    <script src="js/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+<body class="list">
+    <header class="caption">
+        <h1>Python's object model</h1>
+        <p>Marco Buttu, PyCon Italia 6</p>
+    </header>
+    <section class="slide cover" id="Cover"><div>
+        <h2>PYTHON'S OBJECT MODEL</h2>
+        <p>
+        <a href="mailto:marco.buttu@gmail.com">Marco Buttu</a> @ 
+        Python Conference Italia 6</p>
+        <img src="pictures/cover.jpg" alt="">
+        <style>
+            #Cover h2 {
+                margin:60px 0 0;
+                color:#FFF;
+                text-align:center;
+                font-size:80px;
+                line-height:1.15em;
+                }
+            #Cover p {
+                margin:20px;
+                margin-right:135px;
+                text-align:right;
+                color:#FFF;
+                font-style:italic;
+                font-size:21px;
+                }
+                #Cover p a {
+                    color:#990000;
+                    }
+        </style>
+    </div></section>
+
+    <section class="slide"><div>
+        <h2>General Definition Of Object</h2>
+        <blockquote>
+        <p>In computer science, an object is a location in memory having 
+        a value and possibly referenced by an identifier. An object can 
+        be a variable, a data structure, or a function. In the class-based
+        object-oriented programming paradigm, object refers to a 
+        particular instance of a class where the object can be a 
+        combination of variables, functions, and data structures.</p>
+        </blockquote>
+        <figcaption>From
+        <a href="http://en.wikipedia.org/wiki/Object_(computer_science)">
+        Wikipedia</a>, the free encyclopedia</figcaption>
+    </div></section>
+
+    </div></section>
+    <section class="slide"><div>
+        <h2>In Python, Everything's An Object</h2>
+        <pre>
+            <code class="python">
+            >>> import sys
+            >>> isinstance(sys, object) # Modules are objects
+            True
+            >>> isinstance(abs, object) # Functions are objects
+            True
+            >>> class Foo: pass
+            ... 
+            >>> isinstance(Foo, object) # Classes are objects
+            True
+            >>> isinstance(object, object)
+            True
+            </code>
+        </pre>
+    </div></section>
+
+    </div></section>
+    <section class="slide"><div>
+        <h2>Object Is Synonymous for Instance</h2>
+        <pre>
+            <code class="python">
+            >>> class Foo:
+            ...     pass
+            ... 
+            >>> f = Foo()
+            >>> f.foo
+            Traceback (most recent call last):
+                ...
+            AttributeError: 'Foo' object has no attribute 'foo'
+            </code>
+        </pre>
+    </div></section>
+
+    </div></section>
+    <section class="slide"><div>
+        <h2>The (meta) Class type</h2>
+        <pre>
+            <code class="python">
+            >>> isinstance(object, type)
+            True
+            >>> class Foo: pass
+            ... 
+            >>> isinstance(Foo, type)
+            True
+            >>> isinstance(type, type)
+            True
+            </code>
+        </pre>
+    </div></section>
+
+    <div class="progress"><div></div></div>
+    <script src="js/shower.min.js"></script>
+    <!-- Cover pictures from http://hdw.eweb4.com/ -->
+</body>
+</html>
