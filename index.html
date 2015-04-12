@@ -88,8 +88,7 @@
             >>> class Foo:
             ...     pass
             ... 
-            >>> f = Foo()
-            >>> f.foo
+            >>> Foo().foo
             Traceback (most recent call last):
                 ...
             AttributeError: 'Foo' object has no attribute 'foo'
@@ -99,7 +98,7 @@
 
     </div></section>
     <section class="slide"><div>
-        <h2>The (meta) Class type</h2>
+        <h2>Classes are instance of type</h2>
         <pre>
             <code class="python">
             >>> isinstance(object, type)
@@ -110,12 +109,53 @@
             True
             >>> isinstance(type, type)
             True
+            >>> isinstance(Foo(), type)
+            False
             </code>
         </pre>
     </div></section>
 
+    </div></section>
+    <section class="slide"><div>
+        <h2>The Class type Is A Metaclass</h2>
+        <pre>
+        <code class="python">
+        >>> # A metaclass is an object able to create classes
+        >>> # Every class by default is istantiated by the metaclass type
+        ... 
+        >>> class MyClass:
+        ...     a = 33
+        ... 
+        >>> class MyClass(metaclass=type):
+        ...     a = 33
+        ... 
+        >>> MyClass = type('MyClass', (), {'a': 33})}
+        </code>
+        </pre>
+    </div></section>
+
+    </div></section>
+    <section class="slide"><div>
+        <h2>A Subclass Of type Is A Metaclass</h2>
+        <pre>
+        <code class="python">
+        >>> class MyMetaclass(type):
+        ...     pass
+        ... 
+        ... # MyClass = MyMetaclass('MyClass', (), {})
+        >>> class MyClass(metaclass=MyMetaclass): 
+        ...     pass
+        ... 
+        >>> isinstance(MyClass, type)
+        True
+        </code>
+        </pre>
+    </div></section>
+
+
+
     <div class="progress"><div></div></div>
     <script src="js/shower.min.js"></script>
-    <!-- Cover pictures from http://hdw.eweb4.com/ -->
+    <!-- Cover picture from http://hdw.eweb4.com/ -->
 </body>
 </html>
