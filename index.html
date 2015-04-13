@@ -60,7 +60,6 @@
         Wikipedia</a>, the free encyclopedia</figcaption>
     </div></section>
 
-    </div></section>
     <section class="slide"><div>
         <h2>In Python, Everything's An Object</h2>
         <pre>
@@ -80,7 +79,6 @@
         </pre>
     </div></section>
 
-    </div></section>
     <section class="slide"><div>
         <h2>Object Is Synonymous for Instance</h2>
         <pre>
@@ -94,9 +92,10 @@
             AttributeError: 'Foo' object has no attribute 'foo'
             </code>
         </pre>
+        <p class="note">So, in Python everything's an instance:
+        classes are instances too.</p>
     </div></section>
 
-    </div></section>
     <section class="slide"><div>
         <h2>Classes are instance of type</h2>
         <pre>
@@ -107,7 +106,7 @@
             ... 
             >>> isinstance(Foo, type)
             True
-            >>> isinstance(type, type)
+            >>> isinstance(type, type) # It's True for type itself
             True
             >>> isinstance(Foo(), type)
             False
@@ -115,7 +114,6 @@
         </pre>
     </div></section>
 
-    </div></section>
     <section class="slide"><div>
         <h2>The Class type Is A Metaclass</h2>
         <pre>
@@ -129,30 +127,88 @@
         >>> class MyClass(metaclass=type):
         ...     a = 33
         ... 
-        >>> MyClass = type('MyClass', (), {'a': 33})}
+        >>> MyClass = type('MyClass', (), {'a': 33})} # No __prepare__() 
         </code>
         </pre>
     </div></section>
 
-    </div></section>
     <section class="slide"><div>
         <h2>A Subclass Of type Is A Metaclass</h2>
         <pre>
         <code class="python">
+        >>> issubclass(type, type) # The class type is a metaclass
+        True
         >>> class MyMetaclass(type):
         ...     pass
         ... 
-        ... # MyClass = MyMetaclass('MyClass', (), {})
         >>> class MyClass(metaclass=MyMetaclass): 
         ...     pass
         ... 
-        >>> isinstance(MyClass, type)
+        >>> isinstance(MyClass, type) # Istances of MyMetaclass are classes
         True
         </code>
         </pre>
     </div></section>
 
+    <section class="slide"><div>
+        <h2>An Example Of Metaclass</h2>
+        <pre>
+        <code class="python">
+        >>> class SingletonMeta(type):
+        ...     def __call__(cls, *args, **kwargs):
+        ...         if not hasattr(cls, '_instance'):
+        ...             cls._instance = super().__call__(*args, **kwargs)
+        ...         return cls._instance
+        ... 
+        >>> class Foo(metaclass=SingletonMeta): pass
+        ... 
+        >>> f1 = Foo()
+        >>> f2 = Foo()
+        >>> f1 is f2
+        True
+        </code>
+        </pre>
+    </div></section>
 
+    <section class="slide" id="Summary"><div>
+        <h2>Summary</h2>
+        <ol>
+            <li>Everything's an object, and object is synonymous for 
+            instance</li>
+            <li>Classes are instances (objects) of the (meta) class type</li>
+            <li>A subclass of type is a metaclass</li>
+        </ol>
+        <img src="pictures/summary.svg" alt="Summary">
+        <style>
+            #Summary img {
+                margin-top:-30px;
+                margin-left:-20px;
+                width: 34em;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide" id="Diagram"><div>
+        <h2>Object Model Diagram</h2>
+        <img src="pictures/objmodel.svg" alt="Object Model Diagram">
+        <style>
+            #Diagram img {
+                margin-top:0px;
+                margin-left:-20px;
+                width: 32em;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide"><div>
+        <h2>Class And Non-Class Objects</h2>
+        <ol>
+            <li>Everything's an object, and object is synonymous for 
+            instance</li>
+            <li>Classes are instances (objects) of the (meta) class type</li>
+            <li>A subclass of type is a metaclass</li>
+        </ol>
+    </div></section>
 
     <div class="progress"><div></div></div>
     <script src="js/shower.min.js"></script>
