@@ -61,6 +61,71 @@
     </div></section>
 
     <section class="slide"><div>
+        <h2>Every Class Is A Subclass Of object</h2>
+        <pre>
+            <code class="python">
+            >>> issubclass(int, object)
+            True
+            >>> issubclass(list, object)
+            True
+            >>> class MyClass: pass
+            ... 
+            >>> issubclass(MyClass, object)
+            True
+            >>> issubclass(type, object)
+            True
+            >>> issubclass(object, object)
+            True
+            </code>
+        </pre>
+    </div></section>
+
+
+    <section class="slide" id="Object-Model-1"><div>
+        <h2>Every Class Is A Subclass Of object</h2>
+        <img src="pictures/objmodel_1.svg" alt="Object Model Diagram 1">
+        <style>
+            #Object-Model-1 img {
+                margin-top:0px;
+                margin-left:-20px;
+                width: 32em;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide"><div>
+        <h2>The Class type Is The Base-Metaclass</h2>
+        <pre>
+        <code class="python">
+        >>> # A metaclass is an object able to create classes
+        >>> # Every class is by default istantiated by the metaclass type
+        >>> type(type) is type # It's True for type itself
+        True
+        >>> # The two following definitions are equivalent
+        >>> class MyClass:
+        ...     a = 33
+        ... 
+        >>> class MyClass(metaclass=type):
+        ...     a = 33
+        ... 
+        >>> MyClass = type('MyClass', (), {'a': 33})} # No __prepare__() 
+        </code>
+        </pre>
+    </div></section>
+
+    <section class="slide" id="Object-Model-2"><div>
+        <h2>The Class type Is The Base-Metaclass</h2>
+        <img src="pictures/objmodel_2.svg" alt="Object Model Diagram 2">
+        <style>
+            #Object-Model-2 img {
+                margin-top:0px;
+                margin-left:-20px;
+                width: 32em;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide"><div>
         <h2>In Python, Everything's An Object</h2>
         <pre>
             <code class="python">
@@ -79,75 +144,30 @@
         </pre>
     </div></section>
 
-    <section class="slide"><div>
-        <h2>Object Is Synonymous for Instance</h2>
-        <pre>
-            <code class="python">
-            >>> class Foo:
-            ...     pass
-            ... 
-            >>> Foo().foo
-            Traceback (most recent call last):
-                ...
-            AttributeError: 'Foo' object has no attribute 'foo'
-            </code>
-        </pre>
-        <p class="note">So, in Python everything's an instance:
-        classes are instances too.</p>
-    </div></section>
-
-    <section class="slide"><div>
-        <h2>Classes are instances of type</h2>
-        <pre>
-            <code class="python">
-            >>> isinstance(object, type)
-            True
-            >>> class Foo: pass
-            ... 
-            >>> isinstance(Foo, type)
-            True
-            >>> isinstance(type, type) # It's True for type itself
-            True
-            >>> isinstance(Foo(), type)
-            False
-            </code>
-        </pre>
-    </div></section>
-
-    <section class="slide"><div>
-        <h2>The Class type Is A Metaclass</h2>
+    <section class="slide" id="Classification"><div>
+        <h2>Classes And Metaclasses</h2>
+        <ul>
+            <li>Instances of <i>type</i> are classes, while
+            subclasses of <i>type</i> are metaclasses</li>
+        </ul>
         <pre>
         <code class="python">
-        >>> # A metaclass is an object able to create classes
-        >>> # Every class by default is istantiated by the metaclass type
-        ... 
-        >>> class MyClass:
-        ...     a = 33
-        ... 
-        >>> class MyClass(metaclass=type):
-        ...     a = 33
-        ... 
-        >>> MyClass = type('MyClass', (), {'a': 33})} # No __prepare__() 
-        </code>
-        </pre>
-    </div></section>
-
-    <section class="slide"><div>
-        <h2>A Subclass Of type Is A Metaclass</h2>
-        <pre>
-        <code class="python">
-        >>> issubclass(type, type) # The class type is a metaclass
+        >>> issubclass(type, type) # type is a metaclass
         True
-        >>> class MyMetaclass(type):
-        ...     pass
+        >>> class MyMeta(type): pass # Is MyMeta a metaclass?
         ... 
-        >>> class MyClass(metaclass=MyMetaclass): 
-        ...     pass
+        >>> MyClass = MyMeta('MyClass', (), {})}
         ... 
-        >>> isinstance(MyClass, type) # Istances of MyMetaclass are classes
+        >>> isinstance(MyClass, type) # Yes, it is
         True
         </code>
         </pre>
+        <style>
+            #Classification pre {
+                margin-top:-30px;
+                margin-left:35px;
+            }
+        </style>
     </div></section>
 
     <section class="slide"><div>
@@ -170,30 +190,6 @@
         </pre>
     </div></section>
 
-    <section class="slide" id="Object-Model-1"><div>
-        <h2>Every Class Is A Subclass Of object</h2>
-        <img src="pictures/objmodel_1.svg" alt="Object Model Diagram 1">
-        <style>
-            #Object-Model-1 img {
-                margin-top:0px;
-                margin-left:-20px;
-                width: 32em;
-            }
-        </style>
-    </div></section>
-
-    <section class="slide" id="Object-Model-2"><div>
-        <h2>Why Are Classes Instances Of object</h2>
-        <img src="pictures/objmodel_2.svg" alt="Object Model Diagram 2">
-        <style>
-            #Object-Model-2 img {
-                margin-top:0px;
-                margin-left:-20px;
-                width: 32em;
-            }
-        </style>
-    </div></section>
-
     <section class="slide" id="Diagram"><div>
         <h2>Python's Object Model Diagram</h2>
         <img src="pictures/objmodel.svg" alt="Object Model Diagram">
@@ -207,16 +203,32 @@
     </div></section>
 
     <section class="slide"><div>
-        <h2>Esempio di istanza che non ha attributo della classe</h2>
+        <h2>Object Is Synonymous for Instance</h2>
+        <pre>
+            <code class="python">
+            >>> class Foo:
+            ...     pass
+            ... 
+            >>> Foo().foo
+            Traceback (most recent call last):
+                ...
+            AttributeError: 'Foo' object has no attribute 'foo'
+            </code>
+        </pre>
+    </div></section>
+
+    <section class="slide"><div>
+        <h2>Classes And Non Classes</h2>
         <ul>
-            <li>...</li>
+            <li>Far vedere come conta, nel lookup degli attributi</li>
         </ul>
     </div></section>
 
     <section class="slide"><div>
-        <h2>Classes, Non-Classes And Metaclasses</h2>
+        <h2>Metaclasses, Classes and Non-Classes</h2>
         <ul>
-            <li>Descriptors, distinguere nel lookup...</li>
+            <li>Far vedere l'esempio dell'attributo che non fa parte
+            della non-classe</li>
         </ul>
     </div></section>
 
