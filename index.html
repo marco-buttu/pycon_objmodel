@@ -196,6 +196,26 @@
         </style>
     </div></section>
 
+    <section class="slide"><div>
+        <h2>The Class type Is The Default Metaclass</h2>
+        <pre>
+            <code class="python">
+            >>> type(int) is type
+            True
+            >>> type(list) is type
+            True
+            >>> type(object) is type
+            True
+            >>> type(type) is type
+            True
+            >>> import sys
+            >>> module_type = type(sys)
+            >>> type(module_type) is type
+            True
+            </code>
+        </pre>
+    </div></section>
+
     <section class="slide" id="Object-Model-2"><div>
         <h2>The Class type Is The Default Metaclass</h2>
         <img src="pictures/objmodel_2.svg" alt="Object Model Diagram 2">
@@ -222,7 +242,7 @@
 
 
     <section class="slide"><div>
-        <h2>In Python, Everything's An Object</h2>
+        <h2>In Python, Everything Is An Object</h2>
         <pre>
             <code class="python">
             >>> import sys
@@ -280,6 +300,8 @@
             True
             >>> '__name__' in MyClass.__dict__
             False
+            >>> hasattr(MyClass, '__name__') # The right way 
+            True
             >>> isinstance(MyClass, type)
             True
             >>> isinstance(MyClass(), type)
@@ -288,9 +310,9 @@
         </pre>
         <style>
             #FromMeta img {
-                margin-top:0px;
+                margin-top:-10px;
                 margin-left:-15px;
-                width: 32em;
+                width: 31em;
             }
         </style>
     </div></section>
@@ -322,7 +344,7 @@
     <section class="slide"><div>
         <h2>Summary</h2>
         <ul>
-            <li>In Python, Everything's An Object</li>
+            <li>In Python, everything is an object</li>
             <li>The metaclasses are objects that create classes</li>
             <li>Instance is synonymous for object, and classes are instances:
             it is a nonsense to differentiate between classes and objects</li>
