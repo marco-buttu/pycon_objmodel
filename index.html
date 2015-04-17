@@ -60,6 +60,110 @@
         Wikipedia</a>, the free encyclopedia</figcaption>
     </div></section>
 
+    <section class="slide" id="Metaclass"><div>
+        <h2>The Class type Is The Base-Metaclass</h2>
+        <ul>
+            <li>A <i>metaclass</i> is an object able to create classes</li>
+            <li>The class <i>type</i> is a metaclass, and it's the default
+            one:</i></li>
+        </ul>
+        <pre>
+        <code class="python">
+        >>> class MyClass: # By default metaclass=type
+        ...     a = 33
+        ... 
+        >>> class MyClass(metaclass=type): # Explicit definition
+        ...     a = 33
+        ... 
+        >>> MyClass = type('MyClass', (), {'a': 33}) # No __prepare__()
+        </code>
+        </pre>
+        <style>
+            #Metaclass pre {
+                margin-top:-30px;
+                margin-left:35px;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide" id="UserDefinedMetaclasses"><div>
+        <h2>User-Defined Metaclasses</h2>
+        <ul>
+            <li>It is easy to create a metaclass: we can just define a 
+            subclass of <i>type</i></li>
+        </ul>
+        <pre>
+        <code class="python">
+        >>> class MyMetaclass(type): pass
+        ... 
+        >>> # To create a class, we can directly call MyMetaclass
+        >>> MyClass = MyMetaclass('MyClass', (), {})
+        >>> 
+        >>> # We can also indicate MyMetaclass in the class definition
+        >>> class MyClass(metaclass=MyMetaclass): pass
+        ... 
+        >>> type(MyClass) is MyMetaclass
+        True
+        </code>
+        </pre>
+        <style>
+            #UserDefinedMetaclasses pre {
+                margin-top:-30px;
+                margin-left:35px;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide"><div>
+        <h2>An Example Of Metaclass</h2>
+        <pre>
+        <code class="python">
+        >>> class SingletonMeta(type):
+        ...     def __call__(cls, *args, **kwargs):
+        ...         if not hasattr(cls, '_instance'):
+        ...             cls._instance = super().__call__(*args, **kwargs)
+        ...         return cls._instance
+        ... 
+        >>> class MyClass(metaclass=SingletonMeta): pass
+        ... 
+        >>> c1 = MyClass()
+        >>> c2 = MyClass()
+        >>> c1 is c2
+        True
+        </code>
+        </pre>
+    </div></section>
+
+
+    <section class="slide" id="Isinstance"><div>
+        <h2>The built-in isinstance() function</h2>
+        <pre>
+            <code class="python">
+            >>> class ArtMeta(type): pass
+            ... 
+            >>> class Painting(metaclass=ArtMeta): pass
+            ... 
+            >>> class Fresco(Painting): pass
+            ... 
+            >>> adorazione_magi = Fresco()
+            >>> isinstance(adorazione_magi, Fresco)
+            True
+            >>> isinstance(adorazione_magi, Painting)
+            True
+            >>> isinstance(adorazione_magi, ArtMeta)
+            False
+            </code>
+        </pre>
+        <img src="pictures/isinstance.svg" alt="Isinstance function">
+        <style>
+            #Isinstance img {
+                margin-top:-650px;
+                margin-left:550px;
+                width: 15em;
+            }
+        </style>
+    </div></section>
+
     <section class="slide"><div>
         <h2>Every Class Is A Subclass Of object</h2>
         <pre>
@@ -80,7 +184,6 @@
         </pre>
     </div></section>
 
-
     <section class="slide" id="Object-Model-1"><div>
         <h2>Every Class Is A Subclass Of object</h2>
         <img src="pictures/objmodel_1.svg" alt="Object Model Diagram 1">
@@ -93,28 +196,8 @@
         </style>
     </div></section>
 
-    <section class="slide"><div>
-        <h2>The Class type Is The Base-Metaclass</h2>
-        <pre>
-        <code class="python">
-        >>> # A metaclass is an object able to create classes
-        >>> # Every class is by default istantiated by the metaclass type
-        >>> type(type) is type # It's True for type itself
-        True
-        >>> # The two following definitions are equivalent
-        >>> class MyClass:
-        ...     a = 33
-        ... 
-        >>> class MyClass(metaclass=type):
-        ...     a = 33
-        ... 
-        >>> MyClass = type('MyClass', (), {'a': 33})} # No __prepare__() 
-        </code>
-        </pre>
-    </div></section>
-
     <section class="slide" id="Object-Model-2"><div>
-        <h2>The Class type Is The Base-Metaclass</h2>
+        <h2>The Class type Is The Default Metaclass</h2>
         <img src="pictures/objmodel_2.svg" alt="Object Model Diagram 2">
         <style>
             #Object-Model-2 img {
@@ -125,6 +208,19 @@
         </style>
     </div></section>
 
+    <section class="slide" id="Object-Model-3"><div>
+        <h2>The Class type Is Subclass Of Itself</h2>
+        <img src="pictures/objmodel_3.svg" alt="Object Model Diagram 3">
+        <style>
+            #Object-Model-3 img {
+                margin-top:0px;
+                margin-left:-20px;
+                width: 32em;
+            }
+        </style>
+    </div></section>
+
+
     <section class="slide"><div>
         <h2>In Python, Everything's An Object</h2>
         <pre>
@@ -134,59 +230,13 @@
             True
             >>> isinstance(abs, object) # Functions are objects
             True
-            >>> class Foo: pass
+            >>> class MyClass: pass
             ... 
-            >>> isinstance(Foo, object) # Classes are objects
+            >>> isinstance(MyClass, object) # Classes are objects
             True
             >>> isinstance(object, object)
             True
             </code>
-        </pre>
-    </div></section>
-
-    <section class="slide" id="Classification"><div>
-        <h2>Classes And Metaclasses</h2>
-        <ul>
-            <li>Instances of <i>type</i> are classes, while
-            subclasses of <i>type</i> are metaclasses</li>
-        </ul>
-        <pre>
-        <code class="python">
-        >>> issubclass(type, type) # type is a metaclass
-        True
-        >>> class MyMeta(type): pass # Is MyMeta a metaclass?
-        ... 
-        >>> MyClass = MyMeta('MyClass', (), {})}
-        ... 
-        >>> isinstance(MyClass, type) # Yes, it is
-        True
-        </code>
-        </pre>
-        <style>
-            #Classification pre {
-                margin-top:-30px;
-                margin-left:35px;
-            }
-        </style>
-    </div></section>
-
-    <section class="slide"><div>
-        <h2>An Example Of Metaclass</h2>
-        <pre>
-        <code class="python">
-        >>> class SingletonMeta(type):
-        ...     def __call__(cls, *args, **kwargs):
-        ...         if not hasattr(cls, '_instance'):
-        ...             cls._instance = super().__call__(*args, **kwargs)
-        ...         return cls._instance
-        ... 
-        >>> class Foo(metaclass=SingletonMeta): pass
-        ... 
-        >>> f1 = Foo()
-        >>> f2 = Foo()
-        >>> f1 is f2
-        True
-        </code>
         </pre>
     </div></section>
 
@@ -206,31 +256,84 @@
         <h2>Object Is Synonymous for Instance</h2>
         <pre>
             <code class="python">
-            >>> class Foo:
+            >>> class MyClass:
             ...     pass
             ... 
-            >>> Foo().foo
+            >>> MyClass.__name__
+            'MyClass'
+            >>> MyClass().__name__
             Traceback (most recent call last):
                 ...
-            AttributeError: 'Foo' object has no attribute 'foo'
+            AttributeError: 'MyClass' object has no attribute '__name__'
             </code>
         </pre>
+        <p class="note">How come <i>MyClass</i> has the attribute
+        <i>__name__</i> but <i>MyClass()</i> has not?</p>
+    </div></section>
+
+    <section class="slide" id="FromMeta"><div>
+        <h2>From Metaclass To Non-Class Objects</h2>
+        <img src="pictures/from_metaclass.svg" alt="From Metaclass">
+        <pre>
+            <code class="python">
+            >>> '__name__' in type.__dict__
+            True
+            >>> '__name__' in MyClass.__dict__
+            False
+            >>> isinstance(MyClass, type)
+            True
+            >>> isinstance(MyClass(), type)
+            False
+            </code>
+        </pre>
+        <style>
+            #FromMeta img {
+                margin-top:0px;
+                margin-left:-15px;
+                width: 32em;
+            }
+        </style>
+    </div></section>
+
+    <section class="slide" id="Descriptor"><div>
+        <h2>Classes and Non-Classes</h2>
+        <ul>
+            <li>The difference between classes and non-classes matters:
+            the attribute lookup for an object <i>obj</i>
+            depends on whether <i>obj</i> is a class or not
+        </ul>
+        <pre>
+        <code class="python">
+        # If obj is not a class:
+        obj.foo # -> Is type(obj).__dict__['foo'] a descriptor?
+         
+        # If obj is a class
+        obj.foo # -> Is obj.__dict__['foo'] a descriptor?
+        </code>
+        </pre>
+        <style>
+            #Descriptor pre {
+                margin-top:-30px;
+                margin-left:35px;
+            }
+        </style>
     </div></section>
 
     <section class="slide"><div>
-        <h2>Classes And Non Classes</h2>
+        <h2>Summary</h2>
         <ul>
-            <li>Far vedere come conta, nel lookup degli attributi</li>
+            <li>In Python, Everything's An Object</li>
+            <li>The metaclasses are objects that create classes</li>
+            <li>Instance is synonymous for object, and classes are instances:
+            it is a nonsense to differentiate between classes and objects</li>
+            <li>The difference between classes and non-classes matters</li>
+            <li>If <i>isinstance(obj, type)</i> is true, then <i>obj</i>
+            is a class</li>
+            <li>If <i>issubclass(obj, type)</i> is true, then <i>obj</i>
+            is a metaclass</li>
         </ul>
     </div></section>
 
-    <section class="slide"><div>
-        <h2>Metaclasses, Classes and Non-Classes</h2>
-        <ul>
-            <li>Far vedere l'esempio dell'attributo che non fa parte
-            della non-classe</li>
-        </ul>
-    </div></section>
 
     <div class="progress"><div></div></div>
     <script src="js/shower.min.js"></script>
